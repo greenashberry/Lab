@@ -1,12 +1,13 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <limits>
 
 template <typename N>
-N GetNumber(N left_border, N right_border)
+N GetNumber(const N left_border = 0, const N right_border = std::numeric_limits<N>::max())
 {
 	N x;
-	while ((std::cin >> x).fail() || (std::cin.peek() != '\n') || (N > left_border) || (N > right_border))
+	while (((std::cin >> x).fail()) || (std::cin.peek() != '\n') || (x < left_border) || (x > right_border))
 	{
 		std::cin.clear();
 		std::cin.ignore(1000, '\n');
@@ -16,13 +17,5 @@ N GetNumber(N left_border, N right_border)
 	return x;
 }
 
+std::string GetName();
 
-bool GetBool(bool& parameter) 
-{
-	while ((std::cin >> parameter).fail() || (std::cin.peek() != '\n') || ((parameter != 1) && (parameter != 0)))
-	{
-		std::cin.clear();
-		std::cin.ignore(1000, '\n');
-		std::cout << "Wrong input! Please, input bool (1 or 0):" << std::endl;
-	}
-}

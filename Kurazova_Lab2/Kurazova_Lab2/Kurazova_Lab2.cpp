@@ -1,20 +1,82 @@
-﻿// Kurazova_Lab2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include <iostream>
+#include <string>
+#include <fstream>
+#include <format>
+#include <chrono>
+#include <unordered_map>;
+#include "redirect_output_wrapper.h"
+#include "Pipe.h"
+#include "Compression_Station.h"
+#include "Gas_Transportation_System.h"
+#include "Instruments.h"
 
-#include <iostream>
+using namespace std;
+
+void Menu()
+{
+    cout << "1. Add pipe" << endl;
+    cout << "2. Add compression station" << endl;
+    cout << "3. View all objects" << endl;
+    cout << "4. Find pipes" << endl;
+    cout << "5. Find compression stations" << endl;
+    cout << "6. Save" << endl;
+    cout << "7. Load" << endl;
+    cout << "0. Exit" << endl;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    redirect_output_wrapper cer_out(cerr);
+    string time = std::format("{:%d_%m_%Y %H_%M_%OS}", chrono::system_clock::now());
+    ofstream logfile("log_" + time);
+    if (logfile)
+    {
+        cer_out.redirect(logfile);
+    }
+
+    Gas_Transportation_System GTS;
+
+    while (1)
+    {
+        Menu();
+        switch (GetNumber(0,7))
+        {
+        case 1:
+        {
+            cin >> GTS.Pipeline;
+            break;
+            //Здесь добавление трубы
+        }
+        case 2:
+        {
+            cin >> GTS.CS_system;
+            break;
+            //Добавить КС
+        }
+        case 3:
+        {
+            //Посмотреть все объекты
+        }
+        case 4:
+        {
+            //Искать трубы по фильтру
+        }
+        case 5:
+        {
+            //Искать КС по фильтру
+        }
+        case 6:
+        {
+            //Сохранить
+        }
+        case 7:
+        {
+            //Загрузить
+        }
+        case 0:
+        {
+            return 0;
+        }
+        }
+    }
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.

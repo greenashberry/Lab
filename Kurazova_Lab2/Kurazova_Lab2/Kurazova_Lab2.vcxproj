@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,13 +129,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Compression_Station.cpp" />
+    <ClCompile Include="Gas_Transportation_System.cpp" />
+    <ClCompile Include="Instruments.cpp" />
     <ClCompile Include="Kurazova_Lab2.cpp" />
     <ClCompile Include="Pipe.cpp" />
+    <ClCompile Include="redirect_output_wrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compression_Station.h" />
+    <ClInclude Include="Gas_Transportation_System.h" />
     <ClInclude Include="Instruments.h" />
     <ClInclude Include="Pipe.h" />
+    <ClInclude Include="redirect_output_wrapper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
