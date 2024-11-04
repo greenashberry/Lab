@@ -9,8 +9,8 @@
 #include "Compression_Station.h"
 #include "Gas_Transportation_System.h"
 #include "Instruments.h"
-
 using namespace std;
+
 
 void Menu()
 {
@@ -39,7 +39,7 @@ int main()
     while (1)
     {
         Menu();
-        switch (GetNumber(0,7))
+        switch (GetNumber(0, 7))
         {
         case 1:
         {
@@ -55,6 +55,8 @@ int main()
         }
         case 3:
         {
+            cout << GTS;
+            break;
             //Посмотреть все объекты
         }
         case 4:

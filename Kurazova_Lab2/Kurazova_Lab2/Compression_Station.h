@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include "Instruments.h"
+#include <fstream>
 #include <unordered_map>
 
 class Compression_Station
@@ -13,14 +14,16 @@ class Compression_Station
 public:
 	static int MaxID_CS;
 	int number_of_active_workshops;
-	float workshopss_effectivenes = number_of_active_workshops / number_of_workshops;
+	int workshops_effectivenes = (number_of_active_workshops * 100) / number_of_workshops;
 
 	Compression_Station();
 
-	void change_number_of_active_workshops();
+	void update_workshops_effectiveness(Compression_Station&);
+	void change_number_of_active_workshops(Compression_Station&);
 
 	friend std::ostream& operator << (std::ostream& out, const Compression_Station& CS);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Compression_Station>&);
-
+	friend std::ofstream& operator << (std::ofstream& out, const Compression_Station& CS);
+	friend std::ifstream& operator >> (std::ifstream& in, std::unordered_map<int, Compression_Station>&);
 };
 

@@ -12,9 +12,10 @@ Pipe::Pipe()
 	id = MaxID_Pipe++;
 }
 
-void Pipe::change_maintenance_status(Pipe&)
+void Pipe::change_maintenance_status(Pipe& truba)
 {
-
+	cout << "Input pipe's maintenance status (1 - in maintenance, 0 - not in maintenance):" << endl;
+	truba.maintenance_status = GetNumber(0, 1);
 }
 
 int Pipe::GetID(const Pipe& truba)
@@ -46,6 +47,17 @@ std::istream& operator>>(std::istream& in, std::unordered_map<int, Pipe>& Pipeli
 	truba.maintenance_status = GetNumber(0, 1);
 	Pipeline.insert({ truba.GetID(truba), truba });
 	return in;
+}
+
+std::ofstream& operator<<(std::ofstream& out, const Pipe& truba)
+{
+	out << "PIPE" << endl
+		<< truba.id << endl
+		<< truba.name << endl
+		<< truba.length << endl
+		<< truba.diameter << endl
+		<< truba.maintenance_status << endl;
+	return out;
 }
 
 

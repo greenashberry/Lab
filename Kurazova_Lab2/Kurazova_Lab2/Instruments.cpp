@@ -5,18 +5,18 @@ using namespace std;
 
 std::string GetName()
 {
-	string value;
-	while (true)
-	{
-		getline(cin, value);
-		if (!value.empty())
-		{
-			return value;
-		}
-		else
-		{
-			std::cin.ignore(1000, '\n');
-			std::cout << "Wrong input! Please, input correct string:" << std::endl;
-		}
-	}
+    string name;
+    while (true)
+    {
+        getline(cin, name);
+        if (!name.empty())
+        {
+            return name;
+        }
+        else
+        {
+            cout << "Invalid input. Please input a valid name." << endl;
+        }
+    }
+    return std::string();
 }
