@@ -69,6 +69,12 @@ int main()
         }
         case 6:
         {
+            cout << "Enter name for a file:" << endl;
+            string savefile = GetName();
+            ofstream fout(savefile);
+            fout << GTS;
+            fout.close();
+            break;
             //Сохранить
         }
         case 7:

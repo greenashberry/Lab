@@ -44,3 +44,42 @@ std::ostream& operator<<(std::ostream& out, const Gas_Transportation_System& GTS
 	cout << GTS.CS_system;
 	return out;
 }
+
+std::ofstream& operator<<(std::ofstream& out, const std::unordered_map<int, Pipe>& Pipeline)
+{
+	if (Pipeline.size() == 0)
+	{
+		return out;
+	}
+	for (const auto& truba : Pipeline)
+	{
+		out << truba.second;
+	}
+	return out;
+}
+
+std::ofstream& operator<<(std::ofstream& out, const std::unordered_map<int, Compression_Station>& CS_system)
+{
+	if (CS_system.size() == 0)
+	{
+		return out;
+	}
+	for (const auto& CS : CS_system)
+	{
+		out << CS.second;
+	}
+}
+
+std::ofstream& operator<<(std::ofstream& out, const Gas_Transportation_System& GTS)
+{
+	if ((GTS.Pipeline.size() != 0) || (GTS.CS_system.size() != 0))
+	{
+		out << GTS.Pipeline;
+		out << GTS.CS_system;
+	}
+	else
+	{
+		cout << "You are trying to save literally nothing." << endl;
+	}
+	return out;
+}
