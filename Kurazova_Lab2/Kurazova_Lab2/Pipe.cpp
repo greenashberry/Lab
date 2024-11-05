@@ -60,4 +60,42 @@ std::ofstream& operator<<(std::ofstream& out, const Pipe& truba)
 	return out;
 }
 
+std::ifstream& operator>>(std::ifstream& in, std::unordered_map<int, Pipe>& Pipeline)
+{
+	Pipe truba;
+	if (((in >> truba.id).fail()) || (in.peek() != '\n') || (truba.id < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	in.ignore(numeric_limits<streamsize>::max(), '\n');
+	getline(in, truba.name);
+	if (((in >> truba.length).fail()) || (in.peek() != '\n') || (truba.length < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	if (((in >> truba.diameter).fail()) || (in.peek() != '\n') || (truba.diameter < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	if (((in >> truba.maintenance_status).fail()) || (in.peek() != '\n') || ((truba.maintenance_status != 0) && (truba.maintenance_status != 1)))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	Pipeline.insert({ truba.id, truba });
+	truba.MaxID_Pipe = max(truba.id, truba.MaxID_Pipe);
+	return in;
+}
+
 

@@ -20,6 +20,7 @@ public:
 
 	void update_workshops_effectiveness(Compression_Station&);
 	void change_number_of_active_workshops(Compression_Station&);
+	std::string get_pipe_name(const Compression_Station& CS) { return CS.name; };
 
 	friend std::ostream& operator << (std::ostream& out, const Compression_Station& CS);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Compression_Station>&);

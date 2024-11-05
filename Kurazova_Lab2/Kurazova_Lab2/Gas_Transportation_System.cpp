@@ -83,3 +83,25 @@ std::ofstream& operator<<(std::ofstream& out, const Gas_Transportation_System& G
 	}
 	return out;
 }
+
+std::ifstream& operator>>(std::ifstream& in, Gas_Transportation_System& GTS)
+{
+	if (!in)
+	{
+		cout << "File doesn't exist or it is invalid!" << endl;
+		return in;
+	}
+	string input;
+	while (getline(in, input))
+	{
+		if (input == "PIPE")
+		{
+			in >> GTS.Pipeline;
+		}
+		else if (input == "CSTATION")
+		{
+			in >> GTS.CS_system;
+		}
+	}
+	return in;
+}

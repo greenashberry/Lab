@@ -19,5 +19,7 @@ public:
 	friend std::ofstream& operator << (std::ofstream& out, const std::unordered_map<int, Pipe>& Pipeline);
 	friend std::ofstream& operator << (std::ofstream& out, const std::unordered_map<int, Compression_Station>& CS_system);
 	friend std::ofstream& operator << (std::ofstream& out, const Gas_Transportation_System& GTS);
-};
+	friend std::ifstream& operator >> (std::ifstream& in, Gas_Transportation_System& GTS);
 
+	
+};

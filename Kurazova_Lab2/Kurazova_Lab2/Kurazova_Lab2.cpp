@@ -79,6 +79,12 @@ int main()
         }
         case 7:
         {
+            cout << "Please input the name of the save file:" << endl;
+            string savefile = GetName();
+            ifstream fin(savefile);
+            fin >> GTS;
+            fin.close();
+            break;
             //Загрузить
         }
         case 0:

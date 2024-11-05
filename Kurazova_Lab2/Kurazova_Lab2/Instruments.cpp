@@ -8,6 +8,7 @@ std::string GetName()
     string name;
     while (true)
     {
+        cin.ignore(1000, '\n');
         getline(cin, name);
         if (!name.empty())
         {
