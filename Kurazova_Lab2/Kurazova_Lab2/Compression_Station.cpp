@@ -21,31 +21,6 @@ void change_number_of_active_workshops(Compression_Station& CS)
 	update_workshops_effectiveness(CS);
 }
 
-bool CheckByEffectiveness(const Compression_Station& CS, int parameter)
-{
-	cout << "Choose an option:" << endl
-		<< "  1. Equal" << endl
-		<< "  2. More (and equal)" << endl
-		<< "  3. Less (and equal)" << endl;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	int option = GetNumber(1, 3);
-	switch (option)
-	{
-	case 1:
-	{
-		return CS.workshops_effectiveness == parameter;
-	}
-	case 2:
-	{
-		return  CS.workshops_effectiveness >= parameter;
-	}
-	case 3:
-	{
-		return CS.workshops_effectiveness <= parameter;
-	}
-	}
-}
-
 void update_workshops_effectiveness(Compression_Station& CS)
 {
 	CS.workshops_effectiveness = (CS.number_of_active_workshops * 100) / CS.number_of_workshops;
@@ -54,6 +29,21 @@ void update_workshops_effectiveness(Compression_Station& CS)
 bool CheckByName(const Compression_Station& CS, std::string parameter)
 {
 	return CS.name == parameter;
+}
+
+bool CheckByEqual(const Compression_Station& CS, int parameter)
+{
+	return CS.workshops_effectiveness == parameter;
+}
+
+bool CheckByMore(const Compression_Station& CS, int parameter)
+{
+	return CS.workshops_effectiveness >= parameter;
+}
+
+bool CheckByLess(const Compression_Station& CS, int parameter)
+{
+	return CS.workshops_effectiveness <= parameter;
 }
 
 std::ostream& operator<<(std::ostream& out, const Compression_Station& CS)

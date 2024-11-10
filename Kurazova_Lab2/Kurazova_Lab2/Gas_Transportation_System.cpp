@@ -26,7 +26,7 @@ std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Comp
 {
 	if (CS_system.size() == 0)
 	{
-		cout << "There is no compression station." << endl;
+		cout << "There is no compression stations." << endl;
 	}
 	else
 	{
@@ -104,4 +104,14 @@ std::ifstream& operator>>(std::ifstream& in, Gas_Transportation_System& GTS)
 		}
 	}
 	return in;
+}
+
+void Gas_Transportation_System::delete_pipe(unordered_map<int, Pipe>& Pipeline, int ID)
+{
+	Pipeline.erase(ID);
+}
+
+void Gas_Transportation_System::delete_CS(unordered_map<int, Compression_Station>& CS_system, int ID)
+{
+	CS_system.erase(ID);
 }

@@ -23,7 +23,9 @@ public:
 	friend void change_number_of_active_workshops(Compression_Station&);
 	std::string get_pipe_name(const Compression_Station& CS) { return CS.name; };
 	friend bool CheckByName(const Compression_Station& CS, std::string parameter);
-	friend bool CheckByEffectiveness(const Compression_Station& CS, int parameter);
+	friend bool CheckByEqual(const Compression_Station&, int);
+	friend bool CheckByMore(const Compression_Station&, int);
+	friend bool CheckByLess(const Compression_Station&, int);
 
 	friend std::ostream& operator << (std::ostream& out, const Compression_Station& CS);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Compression_Station>&);

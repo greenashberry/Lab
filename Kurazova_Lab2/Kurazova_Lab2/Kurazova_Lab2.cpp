@@ -14,10 +14,14 @@ using namespace std;
 void Menu();
 void PipesFiltering(Gas_Transportation_System&);
 void CSFiltering(Gas_Transportation_System&);
+void PipesPacketRedact(unordered_map<int, Pipe>& Pipeline);
+void CSPacketRedact(unordered_map<int, Compression_Station>& CS_system);
 bool CheckByName(const Pipe& truba, std::string parameter);
 bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
 bool CheckByName(const Compression_Station& CS, std::string parameter);
-bool CheckByEffectiveness(const Compression_Station& CS, int parameter);
+bool CheckByEqual(const Compression_Station&, int);
+bool CheckByMore(const Compression_Station&, int);
+bool CheckByLess(const Compression_Station&, int);
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Compression_Station>& CS_system);
 
@@ -64,7 +68,28 @@ void CSFiltering(Gas_Transportation_System& GTS)
     case 2:
         cout << "Input percent of workshop usage:" << endl;
         int CSWorkshopsToFind = GetNumber(0, 100);
-        cout << GTS.FindCSByFilter(GTS.CS_system, CheckByEffectiveness, CSWorkshopsToFind);
+        cout << "Choose an option:" << endl
+            << "  1. Equal" << endl
+            << "  2. More (and equal)" << endl
+            << "  3. Less (and equal)" << endl;
+        switch (GetNumber(1, 3))
+        {
+        case 1:
+        {
+            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByEqual, CSWorkshopsToFind);
+            break;
+        }
+        case 2:
+        {
+            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByMore, CSWorkshopsToFind);
+            break;
+        }
+        case 3:
+        {
+            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByLess, CSWorkshopsToFind);
+            break;
+        }
+        }
         break;
     }
 }

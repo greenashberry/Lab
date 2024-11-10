@@ -21,6 +21,9 @@ public:
 	friend std::ofstream& operator << (std::ofstream& out, const Gas_Transportation_System& GTS);
 	friend std::ifstream& operator >> (std::ifstream& in, Gas_Transportation_System& GTS);
 
+	void delete_pipe(unordered_map<int, Pipe>& Pipeline, int ID);
+	void delete_CS(unordered_map<int, Compression_Station>& CS_system, int ID);
+
 	template<typename T>
 	using FilterPipes = bool(*)(const Pipe& truba, T parameter);
 
