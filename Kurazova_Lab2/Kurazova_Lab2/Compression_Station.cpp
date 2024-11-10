@@ -7,11 +7,11 @@
 #include <fstream>
 using namespace std;
 
-int Compression_Station::MaxID_CS = 0;
+int Compression_Station::MaxID = 0;
 
 Compression_Station::Compression_Station()
 {
-	id = MaxID_CS++;
+	id = MaxID++;
 }
 
 void change_number_of_active_workshops(Compression_Station& CS)
@@ -121,7 +121,7 @@ std::ifstream& operator>>(std::ifstream& in, unordered_map<int, Compression_Stat
 	}
 	update_workshops_effectiveness(CS);
 	CS_system.insert({ CS.id, CS });
-	CS.MaxID_CS = max(CS.MaxID_CS, CS.id);
+	CS.MaxID = max(CS.MaxID, CS.id);
 	return in;
 }
 

@@ -5,11 +5,11 @@
 #include "Gas_Transportation_System.h"
 using namespace std;
 
-int Pipe::MaxID_Pipe = 0;
+int Pipe::MaxID = 0;
 
 Pipe::Pipe()
 {
-	id = MaxID_Pipe++;
+	id = MaxID++;
 }
 
 void Pipe::change_maintenance_status(Pipe& truba)
@@ -104,7 +104,7 @@ std::ifstream& operator>>(std::ifstream& in, std::unordered_map<int, Pipe>& Pipe
 		return in;
 	}
 	Pipeline.insert({ truba.id, truba });
-	truba.MaxID_Pipe = max(truba.id, truba.MaxID_Pipe);
+	truba.MaxID = max(truba.id, truba.MaxID);
 	return in;
 }
 

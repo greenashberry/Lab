@@ -12,88 +12,10 @@
 using namespace std;
 
 void Menu();
-void PipesFiltering(Gas_Transportation_System&);
-void CSFiltering(Gas_Transportation_System&);
-void PipesPacketRedact(unordered_map<int, Pipe>& Pipeline);
-void CSPacketRedact(unordered_map<int, Compression_Station>& CS_system);
-bool CheckByName(const Pipe& truba, std::string parameter);
-bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
-bool CheckByName(const Compression_Station& CS, std::string parameter);
-bool CheckByEqual(const Compression_Station&, int);
-bool CheckByMore(const Compression_Station&, int);
-bool CheckByLess(const Compression_Station&, int);
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Compression_Station>& CS_system);
-
-
-void PipesFiltering(Gas_Transportation_System& GTS)
-{
-    cout << "Choose filter choice:" << endl
-        << "    1. Name" << endl
-        << "    2. Maintenance status" << endl;
-    switch (GetNumber(1, 2))
-    {
-    case 1:
-    {
-        cout << "Input name:" << endl;
-        string PipeNameToFind = GetName();
-        cout << GTS.FindPipesByFilter(GTS.Pipeline, CheckByName, PipeNameToFind);
-        break;
-    }
-    case 2:
-    {
-        cout << "Input maintenance status:" << endl;
-        bool PipeStatusToFind = GetNumber(0, 1);
-        cout << GTS.FindPipesByFilter(GTS.Pipeline, CheckByMaintenanceStatus, PipeStatusToFind);
-        break;
-    }
-    }
-}
-
-
-void CSFiltering(Gas_Transportation_System& GTS)
-{
-    cout << "Choose filter choice:" << endl
-        << "    1. Name" << endl
-        << "    2. Workshop usage (in %)" << endl;
-    switch (GetNumber(1, 2))
-    {
-    case 1:
-    {
-        cout << "Input name:" << endl;
-        string CSNameToFind = GetName();
-        cout << GTS.FindCSByFilter(GTS.CS_system, CheckByName, CSNameToFind);
-        break;
-    }
-    case 2:
-        cout << "Input percent of workshop usage:" << endl;
-        int CSWorkshopsToFind = GetNumber(0, 100);
-        cout << "Choose an option:" << endl
-            << "  1. Equal" << endl
-            << "  2. More (and equal)" << endl
-            << "  3. Less (and equal)" << endl;
-        switch (GetNumber(1, 3))
-        {
-        case 1:
-        {
-            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByEqual, CSWorkshopsToFind);
-            break;
-        }
-        case 2:
-        {
-            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByMore, CSWorkshopsToFind);
-            break;
-        }
-        case 3:
-        {
-            cout << GTS.FindCSByFilter(GTS.CS_system, CheckByLess, CSWorkshopsToFind);
-            break;
-        }
-        }
-        break;
-    }
-}
-
+void PipesFiltering(std::unordered_map<int, Pipe>&);
+void CSFiltering(std::unordered_map<int, Compression_Station>);
 
 void Menu()
 {
@@ -104,6 +26,8 @@ void Menu()
     cout << "5. Find compression stations" << endl;
     cout << "6. Save" << endl;
     cout << "7. Load" << endl;
+    cout << "8. Redact pipes" << endl;
+    cout << "9. Redact CSs" << endl;
     cout << "0. Exit" << endl;
 }
 
@@ -123,7 +47,7 @@ int main()
     while (1)
     {
         Menu();
-        switch (GetNumber(0, 7))
+        switch (GetNumber(0, 9))
         {
         case 1:
         {
@@ -145,13 +69,15 @@ int main()
         }
         case 4:
         {
-            PipesFiltering(GTS);
+            GTS.PipesFiltering(GTS.Pipeline);
             break;
+            //Фильтрация труб
         }
         case 5:
         {
-            CSFiltering(GTS);
+            GTS.CSFiltering(GTS.CS_system);
             break;
+            //Фильтрация КС
         }
         case 6:
         {
@@ -172,6 +98,16 @@ int main()
             fin.close();
             break;
             //Загрузить
+        }
+        case 8:
+        {
+            GTS.GetIds(GTS.Pipeline);
+            break;
+        }
+        case 9:
+        {
+            GTS.GetIds(GTS.CS_system);
+            break;
         }
         case 0:
         {

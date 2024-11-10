@@ -12,7 +12,7 @@ class Pipe
 	int length;
 	int diameter;
 public:
-	static int MaxID_Pipe;
+	static int MaxID;
 	bool maintenance_status;
 
 	Pipe();

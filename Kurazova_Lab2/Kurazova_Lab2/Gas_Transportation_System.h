@@ -6,6 +6,7 @@
 #include "Pipe.h"
 #include "Compression_Station.h"
 #include <fstream>
+#include <unordered_set>
 
 class Gas_Transportation_System
 {
@@ -21,8 +22,51 @@ public:
 	friend std::ofstream& operator << (std::ofstream& out, const Gas_Transportation_System& GTS);
 	friend std::ifstream& operator >> (std::ifstream& in, Gas_Transportation_System& GTS);
 
-	void delete_pipe(unordered_map<int, Pipe>& Pipeline, int ID);
-	void delete_CS(unordered_map<int, Compression_Station>& CS_system, int ID);
+	void delete_pipe(std::unordered_map<int, Pipe>& Pipeline, int ID);
+	void delete_CS(std::unordered_map<int, Compression_Station>& CS_system, int ID);
+	void PipesFiltering(std::unordered_map<int, Pipe>&);
+	void CSFiltering(std::unordered_map<int, Compression_Station>);
+	void PacketPipeRedact(std::unordered_map<int, Pipe>);
+	void PacketCSRedact(std::unordered_map<int, Compression_Station>);
+	
+
+	template<class T>
+	std::unordered_set<int> GetIds(const std::unordered_map<int, T>& System)
+	{
+		std::unordered_set<int> IDs;
+		if (System.empty())
+		{
+			std::cout << "You don't have any of these objects!" << std::endl;
+			return IDs;
+		}
+		std::cout << "Choose an option:" << std::endl
+			<< "	1. Choose by hand" << std::endl
+			<< "	2. Choose all" << std::endl;
+		switch (GetNumber(1, 2))
+		{
+		case 1:
+		{
+			while (true)
+			{
+				std::cout << "Type -1 to stop" << std::endl;
+				int option = GetNumber(-1, T::MaxID - 1);
+				switch (option)
+				{
+				case -1: { return IDs; }
+				default: { IDs.insert(option); }
+				}
+			}
+		}
+		case 2:
+		{
+			for (const auto& s : System)
+			{
+				IDs.insert(s.first);
+			}
+			return IDs;
+		}
+		}
+	}
 
 	template<typename T>
 	using FilterPipes = bool(*)(const Pipe& truba, T parameter);

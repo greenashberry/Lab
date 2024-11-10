@@ -13,7 +13,7 @@ class Compression_Station
 	int number_of_workshops;
 	int effectiveness;
 public:
-	static int MaxID_CS;
+	static int MaxID;
 	int number_of_active_workshops;
 	int workshops_effectiveness = (number_of_active_workshops * 100) / number_of_workshops;
 
