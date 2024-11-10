@@ -14,25 +14,56 @@ Compression_Station::Compression_Station()
 	id = MaxID_CS++;
 }
 
-void Compression_Station::update_workshops_effectiveness(Compression_Station& CS)
-{
-	CS.workshops_effectivenes = (CS.number_of_active_workshops * 100) / CS.number_of_workshops;
-}
-
-void Compression_Station::change_number_of_active_workshops(Compression_Station& CS)
+void change_number_of_active_workshops(Compression_Station& CS)
 {
 	cout << "Input name of active workshops:" << endl;
 	CS.number_of_active_workshops = GetNumber(0, CS.number_of_workshops);
 	update_workshops_effectiveness(CS);
 }
 
+bool CheckByEffectiveness(const Compression_Station& CS, int parameter)
+{
+	cout << "Choose an option:" << endl
+		<< "  1. Equal" << endl
+		<< "  2. More (and equal)" << endl
+		<< "  3. Less (and equal)" << endl;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	int option = GetNumber(1, 3);
+	switch (option)
+	{
+	case 1:
+	{
+		return CS.workshops_effectiveness == parameter;
+	}
+	case 2:
+	{
+		return  CS.workshops_effectiveness >= parameter;
+	}
+	case 3:
+	{
+		return CS.workshops_effectiveness <= parameter;
+	}
+	}
+}
+
+void update_workshops_effectiveness(Compression_Station& CS)
+{
+	CS.workshops_effectiveness = (CS.number_of_active_workshops * 100) / CS.number_of_workshops;
+}
+
+bool CheckByName(const Compression_Station& CS, std::string parameter)
+{
+	return CS.name == parameter;
+}
+
 std::ostream& operator<<(std::ostream& out, const Compression_Station& CS)
 {
+	cout << endl;
 	cout << "Compression station: " << CS.name << std::endl;
 	cout << "Number of workshops: " << CS.number_of_workshops << std::endl;
 	cout << "Number of active workshops: " << CS.number_of_active_workshops << std::endl;
 	cout << "Effectivenes: " << CS.effectiveness << "%" << std::endl;
-	cout << "Workshop usage procentage" << CS.workshops_effectivenes << endl;
+	cout << "Workshop usage procentage: " << CS.workshops_effectiveness << endl;
 	return out;
 }
 
@@ -46,10 +77,10 @@ std::istream& operator >> (std::istream& in, std::unordered_map<int, Compression
 	CS.number_of_workshops = GetNumber(1);
 	cout << "Input number of active workshops:" << endl;
 	CS.number_of_active_workshops = GetNumber(0, CS.number_of_workshops);
-	CS.update_workshops_effectiveness(CS);
+	update_workshops_effectiveness(CS);
 	cout << "Input effectivenes (in %): " << endl;
 	CS.effectiveness = GetNumber(0, 100);
-	cout << "Workshop usage procentage: " << CS.workshops_effectivenes << endl;
+	cout << "Workshop usage procentage: " << CS.workshops_effectiveness << endl;
 	CS_System.insert({ CS.id, CS });
 	return in;
 }
@@ -98,7 +129,7 @@ std::ifstream& operator>>(std::ifstream& in, unordered_map<int, Compression_Stat
 		cout << "File is invalid!" << endl;
 		return in;
 	}
-	CS.update_workshops_effectiveness(CS);
+	update_workshops_effectiveness(CS);
 	CS_system.insert({ CS.id, CS });
 	CS.MaxID_CS = max(CS.MaxID_CS, CS.id);
 	return in;

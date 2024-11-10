@@ -20,20 +20,12 @@ public:
 	void change_maintenance_status(Pipe&);
 	int GetID(const Pipe&);
 
+	friend bool CheckByName(const Pipe& truba, std::string parameter);
+	friend bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
+
 	friend std::ostream& operator << (std::ostream& out, const Pipe&);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Pipe>&);
 	friend std::ofstream& operator << (std::ofstream& out, const Pipe&);
 	friend std::ifstream& operator >> (std::ifstream& in, std::unordered_map<int, Pipe>&);
-
-	template<typename T>
-	using FilterPipe = bool(*)(const Pipe& truba, T parameter);
-	bool CheckByName(const Pipe& truba, string parameter)
-	{
-		return truba.name == parameter;
-	}
-	bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter)
-	{
-		return truba.maintenance_status == parameter;
-	}
 };
 

@@ -23,6 +23,16 @@ int Pipe::GetID(const Pipe& truba)
 	return truba.id;
 }
 
+bool CheckByName(const Pipe& truba, string parameter)
+{
+	return truba.name == parameter;
+}
+
+bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter)
+{
+	return truba.maintenance_status == parameter;
+}
+
 std::ostream& operator<<(std::ostream& out, const Pipe& truba)
 {
 	cout << "\nId: " << truba.id << std::endl;

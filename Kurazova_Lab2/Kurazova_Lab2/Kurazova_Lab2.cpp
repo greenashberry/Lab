@@ -11,6 +11,64 @@
 #include "Instruments.h"
 using namespace std;
 
+void Menu();
+void PipesFiltering(Gas_Transportation_System&);
+void CSFiltering(Gas_Transportation_System&);
+bool CheckByName(const Pipe& truba, std::string parameter);
+bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
+bool CheckByName(const Compression_Station& CS, std::string parameter);
+bool CheckByEffectiveness(const Compression_Station& CS, int parameter);
+std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
+std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Compression_Station>& CS_system);
+
+
+void PipesFiltering(Gas_Transportation_System& GTS)
+{
+    cout << "Choose filter choice:" << endl
+        << "    1. Name" << endl
+        << "    2. Maintenance status" << endl;
+    switch (GetNumber(1, 2))
+    {
+    case 1:
+    {
+        cout << "Input name:" << endl;
+        string PipeNameToFind = GetName();
+        cout << GTS.FindPipesByFilter(GTS.Pipeline, CheckByName, PipeNameToFind);
+        break;
+    }
+    case 2:
+    {
+        cout << "Input maintenance status:" << endl;
+        bool PipeStatusToFind = GetNumber(0, 1);
+        cout << GTS.FindPipesByFilter(GTS.Pipeline, CheckByMaintenanceStatus, PipeStatusToFind);
+        break;
+    }
+    }
+}
+
+
+void CSFiltering(Gas_Transportation_System& GTS)
+{
+    cout << "Choose filter choice:" << endl
+        << "    1. Name" << endl
+        << "    2. Workshop usage (in %)" << endl;
+    switch (GetNumber(1, 2))
+    {
+    case 1:
+    {
+        cout << "Input name:" << endl;
+        string CSNameToFind = GetName();
+        cout << GTS.FindCSByFilter(GTS.CS_system, CheckByName, CSNameToFind);
+        break;
+    }
+    case 2:
+        cout << "Input percent of workshop usage:" << endl;
+        int CSWorkshopsToFind = GetNumber(0, 100);
+        cout << GTS.FindCSByFilter(GTS.CS_system, CheckByEffectiveness, CSWorkshopsToFind);
+        break;
+    }
+}
+
 
 void Menu()
 {
@@ -23,6 +81,7 @@ void Menu()
     cout << "7. Load" << endl;
     cout << "0. Exit" << endl;
 }
+
 
 int main()
 {
@@ -61,11 +120,13 @@ int main()
         }
         case 4:
         {
-            //Искать трубы по фильтру
+            PipesFiltering(GTS);
+            break;
         }
         case 5:
         {
-            //Искать КС по фильтру
+            CSFiltering(GTS);
+            break;
         }
         case 6:
         {
