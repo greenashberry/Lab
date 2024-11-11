@@ -8,9 +8,8 @@
 #include <fstream>
 #include <unordered_set>
 
-class Gas_Transportation_System
+struct Gas_Transportation_System
 {
-public:
 	std::unordered_map<int, Pipe> Pipeline;
 	std::unordered_map<int, Compression_Station> CS_system;
 
