@@ -16,7 +16,7 @@ Compression_Station::Compression_Station()
 
 void change_number_of_active_workshops(Compression_Station& CS)
 {
-	cout << "Input name of active workshops:" << endl;
+	cout << "Input number of active workshops:" << endl;
 	CS.number_of_active_workshops = GetNumber(0, CS.number_of_workshops);
 	update_workshops_effectiveness(CS);
 }
@@ -49,6 +49,7 @@ bool CheckByLess(const Compression_Station& CS, int parameter)
 std::ostream& operator<<(std::ostream& out, const Compression_Station& CS)
 {
 	cout << endl;
+	cout << "Compression station's ID: " << CS.id << endl;
 	cout << "Compression station: " << CS.name << std::endl;
 	cout << "Number of workshops: " << CS.number_of_workshops << std::endl;
 	cout << "Number of active workshops: " << CS.number_of_active_workshops << std::endl;

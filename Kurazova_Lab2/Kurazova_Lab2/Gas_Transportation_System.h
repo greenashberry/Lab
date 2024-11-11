@@ -24,11 +24,28 @@ public:
 
 	void delete_pipe(std::unordered_map<int, Pipe>& Pipeline, int ID);
 	void delete_CS(std::unordered_map<int, Compression_Station>& CS_system, int ID);
-	void PipesFiltering(std::unordered_map<int, Pipe>&);
-	void CSFiltering(std::unordered_map<int, Compression_Station>);
-	void PacketPipeRedact(std::unordered_map<int, Pipe>);
-	void PacketCSRedact(std::unordered_map<int, Compression_Station>);
-	
+	void PipesFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>&);
+	void CSFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>);
+	void PacketEditPipe(std::unordered_map<int, Pipe>&, std::unordered_set<int>&, bool);
+	void PacketEditCS(std::unordered_map<int, Compression_Station>&, std::unordered_set<int>&);
+	int PipelinePacket(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipe_List);
+	int CSPacket(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>& CS_System);
+
+
+	template<class T>
+	int DeleteObjects(std::unordered_map<int, T>& System, std::unordered_set<int>& IDs)
+	{
+		if ((System.empty()) || (IDs.empty()))
+		{
+			std::cout << "There is no objects or you didn't give any IDs." << std::endl;
+			return 0;
+		}
+		for (const auto& s : IDs)
+		{
+			System.erase(s);
+		}
+		return 1;
+	}
 
 	template<class T>
 	std::unordered_set<int> GetIds(const std::unordered_map<int, T>& System)
@@ -53,7 +70,17 @@ public:
 				switch (option)
 				{
 				case -1: { return IDs; }
-				default: { IDs.insert(option); }
+				default: 
+				{
+					if (System.contains(option))
+					{
+						IDs.insert(option);
+					}
+					else
+					{
+						std::cout << "There is no object with this ID!" << std::endl;
+					}
+				}
 				}
 			}
 		}

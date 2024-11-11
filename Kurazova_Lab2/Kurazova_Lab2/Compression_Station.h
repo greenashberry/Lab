@@ -26,6 +26,7 @@ public:
 	friend bool CheckByEqual(const Compression_Station&, int);
 	friend bool CheckByMore(const Compression_Station&, int);
 	friend bool CheckByLess(const Compression_Station&, int);
+	int get_workshops_number() const { return number_of_workshops; };
 
 	friend std::ostream& operator << (std::ostream& out, const Compression_Station& CS);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Compression_Station>&);

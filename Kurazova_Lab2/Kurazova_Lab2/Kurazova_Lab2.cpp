@@ -17,6 +17,8 @@ std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Comp
 void PipesFiltering(std::unordered_map<int, Pipe>&);
 void CSFiltering(std::unordered_map<int, Compression_Station>);
 
+
+
 void Menu()
 {
     cout << "1. Add pipe" << endl;
@@ -69,13 +71,13 @@ int main()
         }
         case 4:
         {
-            GTS.PipesFiltering(GTS.Pipeline);
+            GTS.PipesFiltering(GTS, GTS.Pipeline);
             break;
             //Фильтрация труб
         }
         case 5:
         {
-            GTS.CSFiltering(GTS.CS_system);
+            GTS.CSFiltering(GTS, GTS.CS_system);
             break;
             //Фильтрация КС
         }
@@ -101,12 +103,12 @@ int main()
         }
         case 8:
         {
-            GTS.GetIds(GTS.Pipeline);
+            GTS.PipelinePacket(GTS, GTS.Pipeline);
             break;
         }
         case 9:
         {
-            GTS.GetIds(GTS.CS_system);
+            GTS.CSPacket(GTS, GTS.CS_system);
             break;
         }
         case 0:
