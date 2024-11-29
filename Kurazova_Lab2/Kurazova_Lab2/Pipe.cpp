@@ -25,12 +25,17 @@ int Pipe::GetID(const Pipe& truba)
 
 bool CheckByName(const Pipe& truba, string parameter)
 {
-	return truba.name == parameter;
+	return ((truba.name.find(parameter) != string::npos) ? 1 : 0);
 }
 
 bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter)
 {
 	return truba.maintenance_status == parameter;
+}
+
+bool CheckByDiameter(const Pipe& truba, int parameter)
+{
+	return truba.diameter == parameter;
 }
 
 std::ostream& operator<<(std::ostream& out, const Pipe& truba)

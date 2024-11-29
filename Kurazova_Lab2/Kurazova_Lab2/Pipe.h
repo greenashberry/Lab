@@ -27,5 +27,6 @@ public:
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Pipe>&);
 	friend std::ofstream& operator << (std::ofstream& out, const Pipe&);
 	friend std::ifstream& operator >> (std::ifstream& in, std::unordered_map<int, Pipe>&);
+	friend bool CheckByDiameter(const Pipe& truba, int parameter);
 };
 

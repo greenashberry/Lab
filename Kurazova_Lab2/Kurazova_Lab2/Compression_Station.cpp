@@ -28,7 +28,7 @@ void update_workshops_effectiveness(Compression_Station& CS)
 
 bool CheckByName(const Compression_Station& CS, std::string parameter)
 {
-	return CS.name == parameter;
+	return ((CS.name.find(parameter) != string::npos)?1:0);
 }
 
 bool CheckByEqual(const Compression_Station& CS, int parameter)

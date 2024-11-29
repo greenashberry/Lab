@@ -45,6 +45,7 @@ int main()
     }
 
     Gas_Transportation_System GTS;
+    Gas_Transportation_System FreeObjects;
 
     while (1)
     {

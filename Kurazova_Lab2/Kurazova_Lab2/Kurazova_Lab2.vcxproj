@@ -132,6 +132,7 @@
     <ClCompile Include="Gas_Transportation_System.cpp" />
     <ClCompile Include="Instruments.cpp" />
     <ClCompile Include="Kurazova_Lab2.cpp" />
+    <ClCompile Include="Link.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="redirect_output_wrapper.cpp" />
   </ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="Compression_Station.h" />
     <ClInclude Include="Gas_Transportation_System.h" />
     <ClInclude Include="Instruments.h" />
+    <ClInclude Include="Link.h" />
     <ClInclude Include="Pipe.h" />
     <ClInclude Include="redirect_output_wrapper.h" />
   </ItemGroup>
