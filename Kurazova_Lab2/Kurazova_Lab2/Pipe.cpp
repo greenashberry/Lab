@@ -23,6 +23,11 @@ int Pipe::GetID(const Pipe& truba)
 	return truba.id;
 }
 
+bool CheckByAvailability(const Pipe& Truba, bool parameter)
+{
+	return Truba.part_of_the_link == parameter;
+}
+
 bool CheckByName(const Pipe& truba, string parameter)
 {
 	return ((truba.name.find(parameter) != string::npos) ? 1 : 0);
@@ -45,6 +50,7 @@ std::ostream& operator<<(std::ostream& out, const Pipe& truba)
 	cout << "Pipe length: " << truba.length << std::endl;
 	cout << "Pipe diameter: " << truba.diameter << std::endl;
 	cout << "Pipe status: " << (truba.maintenance_status ? "in maintenance" : "working") << std::endl;
+	cout << (truba.part_of_the_link ? "Pipe is a part of connection." : "Pipe isn't a part of the connection") << endl;
 	return out;
 }
 
@@ -52,7 +58,7 @@ std::istream& operator>>(std::istream& in, std::unordered_map<int, Pipe>& Pipeli
 {
 	Pipe truba;
 	cout << "ID of the pipe: " << truba.id << endl;
-	cout << "Inpit pipe's name:" << endl;
+	cout << "Input pipe's name:" << endl;
 	truba.name = GetName();
 	cout << "Input pipe's length:" << endl;
 	truba.length = GetNumber(1);
@@ -71,7 +77,8 @@ std::ofstream& operator<<(std::ofstream& out, const Pipe& truba)
 		<< truba.name << endl
 		<< truba.length << endl
 		<< truba.diameter << endl
-		<< truba.maintenance_status << endl;
+		<< truba.maintenance_status << endl
+		<< truba.part_of_the_link << endl;
 	return out;
 }
 

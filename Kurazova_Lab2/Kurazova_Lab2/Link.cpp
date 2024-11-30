@@ -9,29 +9,69 @@
 #include "Instruments.h"
 using namespace std;
 
-void Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system)
+bool CheckByDiameter(const Pipe& Truba, int parameter);
+bool CheckByAvailability(const Pipe& Truba, bool parameter);
+struct Gas_Transportation_System;
+std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
+
+bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system, Link k)
 {
-	Link k;
-	while ((!GTS.CS_system.contains(k.CS_inlet)) || (!GTS.CS_system.contains(k.CS_outlet)) || (!GTS.Pipeline.contains(k.pipeline)))
+	if (GTS.CS_system.size() < 2)
+	{
+		cout << "There is no compression stations." << endl;
+		return 0;
+	}
+	while (!CheckAnExistence(k.CS_inlet, GTS.CS_system))
 	{
 		cout << "Input an ID of inlet compression station:" << endl;
 		k.CS_inlet = GetNumber(0);
-		if (!GTS.Pipeline.contains(k.CS_inlet))
+		if (!CheckAnExistence(k.CS_inlet, GTS.CS_system))
 		{
-			cin.ignore(1000, '\n');
-			cout << "There is no pipe with this ID." << endl;
-			continue;
+			cout << "There is no compression station with this ID!" << endl;
 		}
+	}
+	while (!CheckAnExistence(k.CS_outlet, GTS.CS_system) || (k.CS_inlet == k.CS_outlet))
+	{
 		cout << "Input an ID of outlet compression station:" << endl;
 		k.CS_outlet = GetNumber(0);
-		if (!GTS.Pipeline.contains(k.CS_outlet))
+		if (!CheckAnExistence(k.CS_outlet, GTS.CS_system))
 		{
-			cin.ignore(1000, '\n');
-			cout << "There is no pipe with this ID." << endl;
-			continue;
+			cout << "There is no compression station with this ID!" << endl;
 		}
-		cout << "Input pipe's diameter: " << endl;
-		int parameter = GetNumber(0, 1000);
-
+		if (k.CS_inlet == k.CS_outlet)
+		{
+			cout << "Your inlet compresssion station can't be your outlet compression station." << endl;
+		}
 	}
+	int diameter;
+	cout << "Input a diameter of needed pipe:" << endl;
+	diameter = GetNumber(1);
+	unordered_map<int, Pipe> suitable_pipes = FindPipesByFilter(GTS.Pipeline, CheckByDiameter, diameter);
+	unordered_map<int, Pipe> available_pipes = FindPipesByFilter(suitable_pipes, CheckByAvailability, false);
+	if (available_pipes.empty())
+	{
+		cout << "There is no available suitable pipes. Redirecting you to adding a new pipe." << endl;
+		cin >> GTS.Pipeline;
+		k.pipeline = Pipe::MaxID;
+		GTS.Pipeline[k.pipeline].part_of_the_link = 1;
+	}
+	else
+	{
+		cout << "Choose an available pipe:" << endl;
+		cout << available_pipes;
+		while (CheckAnExistence(k.pipeline, available_pipes))
+		{
+			k.pipeline = GetNumber(0);
+			if (!CheckAnExistence(k.pipeline, available_pipes))
+			{
+				cout << "Choose out of available pipes!" << endl;
+			}
+			else
+			{
+				GTS.Pipeline[k.pipeline].part_of_the_link = 1;
+			}
+		}
+	}
+	system.push_back(k);
+	return 1;
 }

@@ -9,6 +9,7 @@
 #include "Compression_Station.h"
 #include "Gas_Transportation_System.h"
 #include "Instruments.h"
+#include "Link.h"
 using namespace std;
 
 void Menu();
@@ -16,8 +17,7 @@ std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Compression_Station>& CS_system);
 void PipesFiltering(std::unordered_map<int, Pipe>&);
 void CSFiltering(std::unordered_map<int, Compression_Station>);
-
-
+bool CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system);
 
 void Menu()
 {
@@ -28,8 +28,9 @@ void Menu()
     cout << "5. Find compression stations" << endl;
     cout << "6. Save" << endl;
     cout << "7. Load" << endl;
-    cout << "8. Redact pipes" << endl;
-    cout << "9. Redact CSs" << endl;
+    cout << "8. Edit pipes" << endl;
+    cout << "9. Edit CSs" << endl;
+    cout << "10. Add a connection" << endl;
     cout << "0. Exit" << endl;
 }
 
@@ -46,11 +47,12 @@ int main()
 
     Gas_Transportation_System GTS;
     Gas_Transportation_System FreeObjects;
+    vector<Link> connections;
 
     while (1)
     {
         Menu();
-        switch (GetNumber(0, 9))
+        switch (GetNumber(0, 10))
         {
         case 1:
         {
@@ -110,6 +112,12 @@ int main()
         case 9:
         {
             GTS.CSPacket(GTS, GTS.CS_system);
+            break;
+        }
+        case 10:
+        {
+            Link k;
+            k.CreateLink(GTS, connections, k);
             break;
         }
         case 0:

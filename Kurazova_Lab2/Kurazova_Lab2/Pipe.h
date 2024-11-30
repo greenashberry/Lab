@@ -14,6 +14,7 @@ class Pipe
 public:
 	static int MaxID;
 	bool maintenance_status;
+	bool part_of_the_link = 0;
 
 	Pipe();
 
@@ -22,11 +23,12 @@ public:
 
 	friend bool CheckByName(const Pipe& truba, std::string parameter);
 	friend bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
+	friend bool CheckByDiameter(const Pipe& Truba, int parameter);
+	friend bool CheckByAvailability(const Pipe& Truba, bool parameter);
 
 	friend std::ostream& operator << (std::ostream& out, const Pipe&);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Pipe>&);
 	friend std::ofstream& operator << (std::ofstream& out, const Pipe&);
 	friend std::ifstream& operator >> (std::ifstream& in, std::unordered_map<int, Pipe>&);
-	friend bool CheckByDiameter(const Pipe& truba, int parameter);
 };
 
