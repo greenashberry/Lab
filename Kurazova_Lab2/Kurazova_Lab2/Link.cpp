@@ -14,7 +14,7 @@ bool CheckByAvailability(const Pipe& Truba, bool parameter);
 struct Gas_Transportation_System;
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
 
-bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system, Link k)
+bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link>& system, Link& k)
 {
 	if (GTS.CS_system.size() < 2)
 	{
@@ -52,14 +52,15 @@ bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system, 
 	{
 		cout << "There is no available suitable pipes. Redirecting you to adding a new pipe." << endl;
 		cin >> GTS.Pipeline;
-		k.pipeline = Pipe::MaxID;
+		k.pipeline = Pipe::MaxID - 1;
 		GTS.Pipeline[k.pipeline].part_of_the_link = 1;
 	}
 	else
 	{
-		cout << "Choose an available pipe:" << endl;
+		cout << "Available pipes:" << endl;
 		cout << available_pipes;
-		while (CheckAnExistence(k.pipeline, available_pipes))
+		cout << "Choose out of the availavle pipes:" << endl;
+		while (!CheckAnExistence(k.pipeline, available_pipes))
 		{
 			k.pipeline = GetNumber(0);
 			if (!CheckAnExistence(k.pipeline, available_pipes))
@@ -74,4 +75,28 @@ bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system, 
 	}
 	system.push_back(k);
 	return 1;
+}
+
+std::ostream& operator<<(std::ostream& out, const Link& link)
+{
+	cout << "ID of the inlet compression station: " << link.CS_inlet << endl;
+	cout << "ID of the outlet compression station: " << link.CS_outlet << endl;
+	cout << "ID of the pipe in connection: " << link.pipeline << endl << endl;
+	return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const std::vector<Link>& system)
+{
+	if (system.empty())
+	{
+		cout << "There is no active connections." << endl;
+	}
+	else
+	{
+		for (auto i : system)
+		{
+			cout << i;
+		}
+	}
+	return out;
 }

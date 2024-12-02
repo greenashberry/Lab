@@ -31,6 +31,7 @@ void Menu()
     cout << "8. Edit pipes" << endl;
     cout << "9. Edit CSs" << endl;
     cout << "10. Add a connection" << endl;
+    cout << "11. View all connections" << endl;
     cout << "0. Exit" << endl;
 }
 
@@ -52,7 +53,7 @@ int main()
     while (1)
     {
         Menu();
-        switch (GetNumber(0, 10))
+        switch (GetNumber(0, 11))
         {
         case 1:
         {
@@ -118,6 +119,11 @@ int main()
         {
             Link k;
             k.CreateLink(GTS, connections, k);
+            break;
+        }
+        case 11:
+        {
+            cout << connections;
             break;
         }
         case 0:

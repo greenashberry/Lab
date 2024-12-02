@@ -14,9 +14,10 @@ struct Link
 	int CS_inlet = -1;
 	int CS_outlet = -1;
 
-	bool CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system, Link k);
+	bool CreateLink(Gas_Transportation_System& GTS, std::vector<Link>& system, Link& k);
 
 	friend std::ostream& operator << (std::ostream& out, const Link& link);
+	friend std::ostream& operator << (std::ostream& out, const std::vector<Link>& system);
 	friend std::ofstream& operator << (std::ofstream& out, const Link& link);
 	friend std::ofstream& operator << (std::ofstream& out, const std::vector<Link>& system);
 
