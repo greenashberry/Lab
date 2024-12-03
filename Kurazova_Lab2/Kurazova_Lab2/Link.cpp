@@ -6,7 +6,10 @@
 #include "Compression_Station.h"
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include "Instruments.h"
+#include <stack>
+#include <algorithm>
 using namespace std;
 
 bool CheckByDiameter(const Pipe& Truba, int parameter);
@@ -77,6 +80,64 @@ bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link>& system,
 	return 1;
 }
 
+
+
+void TopSort(const std::unordered_map<int, Compression_Station>& CS, const std::vector<Link>& connections)
+{
+	vector<int> sorted_cs;
+	unordered_set<int> processed_cs;
+	bool cycle = 0;
+	for (const auto cs : CS)
+	{
+		if (!processed_cs.contains(cs.first))
+		{
+			unordered_set<int> gray_stations;
+			dfs(cs.first, sorted_cs, processed_cs, connections, gray_stations, cycle);
+		}
+	}
+	if (cycle)
+	{
+		cout << "Topological sort is impossible, there is a cycle!" << endl;
+		return;
+	}
+	reverse(sorted_cs.begin(), sorted_cs.end());
+	cout << "Topological sort: ";
+	for (const auto i : sorted_cs)
+	{
+		cout << "-> " << i;
+	}
+	cout << endl;
+	return;
+}
+
+void dfs(int station, std::vector<int>& order, std::unordered_set<int>& visited, const std::vector<Link>& connections, std::unordered_set<int>& gray_stations, bool& flag)
+{
+	if (flag)
+	{
+		return;
+	}
+	gray_stations.insert(station);
+	for (const auto s : connections)
+	{
+		if ((s.CS_inlet == station) && (!visited.contains(s.CS_outlet)))
+		{
+			if (gray_stations.contains(s.CS_outlet))
+			{
+				flag = 1;
+				return;
+			}
+			else
+			{
+				dfs(s.CS_outlet, order, visited, connections, gray_stations, flag);
+			}
+		}
+	}
+	visited.insert(station);
+	order.push_back(station);
+	gray_stations.erase(station);
+}
+
+
 std::ostream& operator<<(std::ostream& out, const Link& link)
 {
 	cout << "ID of the inlet compression station: " << link.CS_inlet << endl;
@@ -93,10 +154,39 @@ std::ostream& operator<<(std::ostream& out, const std::vector<Link>& system)
 	}
 	else
 	{
-		for (auto i : system)
+		for (const auto i : system)
 		{
 			cout << i;
 		}
 	}
 	return out;
 }
+
+std::ofstream& operator<<(std::ofstream& out, const Link& link)
+{
+	out << "LINK" << endl
+		<< link.CS_inlet << endl
+		<< link.CS_outlet << endl
+		<< link.pipeline << endl;
+	return out;
+}
+
+std::ofstream& operator<<(std::ofstream& out, const std::vector<Link>& system)
+{
+	if (system.size() == 0)
+	{
+		return out;
+	}
+	for (const auto i : system)
+	{
+		out << i;
+	}
+	return out;
+}
+
+std::ifstream& operator>>(std::ifstream& out, Link& connection)
+{
+	
+}
+
+

@@ -77,6 +77,7 @@ std::ofstream& operator<<(std::ofstream& out, const std::unordered_map<int, Comp
 	{
 		out << CS.second;
 	}
+	return out;
 }
 
 std::ofstream& operator<<(std::ofstream& out, const Gas_Transportation_System& GTS)

@@ -12,12 +12,13 @@
 #include "Link.h"
 using namespace std;
 
+struct Link;
 void Menu();
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline);
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Compression_Station>& CS_system);
 void PipesFiltering(std::unordered_map<int, Pipe>&);
 void CSFiltering(std::unordered_map<int, Compression_Station>);
-bool CreateLink(Gas_Transportation_System& GTS, std::vector<Link> system);
+void TopSort(const std::unordered_map<int, Compression_Station>& CS, const std::vector<Link>& connections);
 
 void Menu()
 {
@@ -32,6 +33,7 @@ void Menu()
     cout << "9. Edit CSs" << endl;
     cout << "10. Add a connection" << endl;
     cout << "11. View all connections" << endl;
+    cout << "12. Topological sort" << endl;
     cout << "0. Exit" << endl;
 }
 
@@ -53,7 +55,7 @@ int main()
     while (1)
     {
         Menu();
-        switch (GetNumber(0, 11))
+        switch (GetNumber(0, 12))
         {
         case 1:
         {
@@ -91,6 +93,7 @@ int main()
             string savefile = GetName();
             ofstream fout(savefile);
             fout << GTS;
+            fout << connections;
             fout.close();
             break;
             //Сохранить
@@ -124,6 +127,11 @@ int main()
         case 11:
         {
             cout << connections;
+            break;
+        }
+        case 12:
+        {
+            TopSort(GTS.CS_system, connections);
             break;
         }
         case 0:
