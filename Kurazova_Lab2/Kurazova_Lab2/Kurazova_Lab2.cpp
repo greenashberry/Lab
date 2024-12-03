@@ -19,6 +19,7 @@ std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Comp
 void PipesFiltering(std::unordered_map<int, Pipe>&);
 void CSFiltering(std::unordered_map<int, Compression_Station>);
 void TopSort(const std::unordered_map<int, Compression_Station>& CS, const std::vector<Link>& connections);
+void LoadConnections(std::vector<Link>& connections, const Gas_Transportation_System& GTS, ifstream& in);
 
 void Menu()
 {
@@ -77,13 +78,13 @@ int main()
         }
         case 4:
         {
-            GTS.PipesFiltering(GTS, GTS.Pipeline);
+            GTS.PipesFiltering(GTS, GTS.Pipeline, connections);
             break;
             //Фильтрация труб
         }
         case 5:
         {
-            GTS.CSFiltering(GTS, GTS.CS_system);
+            GTS.CSFiltering(GTS, GTS.CS_system, connections);
             break;
             //Фильтрация КС
         }
@@ -104,18 +105,19 @@ int main()
             string savefile = GetName();
             ifstream fin(savefile);
             fin >> GTS;
+            LoadConnections(connections, GTS, fin);
             fin.close();
             break;
             //Загрузить
         }
         case 8:
         {
-            GTS.PipelinePacket(GTS, GTS.Pipeline);
+            GTS.PipelinePacket(GTS, GTS.Pipeline, connections);
             break;
         }
         case 9:
         {
-            GTS.CSPacket(GTS, GTS.CS_system);
+            GTS.CSPacket(GTS, GTS.CS_system, connections);
             break;
         }
         case 10:

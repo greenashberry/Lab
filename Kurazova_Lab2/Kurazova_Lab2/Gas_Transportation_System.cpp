@@ -7,6 +7,9 @@
 #include <unordered_set>
 using namespace std;
 
+struct Link;
+void deleteCSConnections(int id, std::vector<Link>& connections);
+void deletePipeConnection(int id, std::vector<Link>& connections);
 bool CheckByName(const Pipe& truba, std::string parameter);
 bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
 bool CheckByName(const Compression_Station& CS, std::string parameter);
@@ -14,6 +17,7 @@ bool CheckByEqual(const Compression_Station&, int);
 bool CheckByMore(const Compression_Station&, int);
 bool CheckByLess(const Compression_Station&, int);
 void change_number_of_active_workshops(Compression_Station&);
+
 
 std::ostream& operator << (std::ostream& out, const std::unordered_map<int, Pipe>& Pipeline)
 {
@@ -102,7 +106,7 @@ std::ifstream& operator>>(std::ifstream& in, Gas_Transportation_System& GTS)
 		return in;
 	}
 	string input;
-	while (getline(in, input))
+	while (getline(in, input) and (in.peek() != 'L'))
 	{
 		if (input == "PIPE")
 		{
@@ -116,17 +120,30 @@ std::ifstream& operator>>(std::ifstream& in, Gas_Transportation_System& GTS)
 	return in;
 }
 
-void Gas_Transportation_System::delete_pipe(unordered_map<int, Pipe>& Pipeline, int ID)
+void Gas_Transportation_System::delete_pipe(unordered_map<int, Pipe>& Pipeline, std::vector<Link>& connections, int ID)
 {
+	if (Pipeline[ID].part_of_the_link)
+	{
+		cout << "Are you sure? It's a part of the connection. (1 - yes, 0 - no)" << endl;
+		switch (GetNumber(0, 1))
+		{
+		case 0: return;
+		case 1:
+		{
+			deletePipeConnection(ID, connections);
+		}
+		}
+	}
 	Pipeline.erase(ID);
 }
 
-void Gas_Transportation_System::delete_CS(unordered_map<int, Compression_Station>& CS_system, int ID)
+void Gas_Transportation_System::delete_CS(unordered_map<int, Compression_Station>& CS_system, std::vector<Link>& connections, int ID)
 {
 	CS_system.erase(ID);
+	deleteCSConnections(ID, connections);
 }
 
-void Gas_Transportation_System::PipesFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipeline)
+void Gas_Transportation_System::PipesFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipeline, std::vector<Link>& connections)
 {
 	cout << "Choose filter choice:" << endl
 		<< "    1. Name" << endl
@@ -139,7 +156,7 @@ void Gas_Transportation_System::PipesFiltering(Gas_Transportation_System& GTS, s
 		string PipeNameToFind = GetName();
 		unordered_map<int, Pipe> filtered = FindPipesByFilter(Pipeline, CheckByName, PipeNameToFind);
 		cout << filtered;
-		if (!filtered.empty()) { PipelinePacket(GTS, filtered); };
+		if (!filtered.empty()) { PipelinePacket(GTS, filtered, connections); };
 		break;
 	}
 	case 2:
@@ -148,13 +165,13 @@ void Gas_Transportation_System::PipesFiltering(Gas_Transportation_System& GTS, s
 		bool PipeStatusToFind = GetNumber(0, 1);
 		unordered_map<int, Pipe> filtered = FindPipesByFilter(Pipeline, CheckByMaintenanceStatus, PipeStatusToFind);
 		cout << filtered;
-		if (!filtered.empty()) { PipelinePacket(GTS, filtered); };
+		if (!filtered.empty()) { PipelinePacket(GTS, filtered, connections); };
 		break;
 	}
 	}
 }
 
-void Gas_Transportation_System::CSFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station> CS_system)
+void Gas_Transportation_System::CSFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station> CS_system, std::vector<Link>& connections)
 {
 	cout << "Choose filter choice:" << endl
 		<< "    1. Name" << endl
@@ -167,7 +184,7 @@ void Gas_Transportation_System::CSFiltering(Gas_Transportation_System& GTS, std:
 		string CSNameToFind = GetName();
 		unordered_map<int, Compression_Station> filtered = FindCSByFilter(CS_system, CheckByName, CSNameToFind);
 		cout << filtered;
-		if (!filtered.empty()) { CSPacket(GTS, filtered); };
+		if (!filtered.empty()) { CSPacket(GTS, filtered, connections); };
 		break;
 	}
 	case 2:
@@ -183,21 +200,21 @@ void Gas_Transportation_System::CSFiltering(Gas_Transportation_System& GTS, std:
 		{
 			unordered_map<int, Compression_Station> filtered = FindCSByFilter(CS_system, CheckByEqual, CSWorkshopsToFind);
 			cout << filtered;
-			if (!filtered.empty()) { CSPacket(GTS, filtered); };
+			if (!filtered.empty()) { CSPacket(GTS, filtered, connections); };
 			break;
 		}
 		case 2:
 		{
 			unordered_map<int, Compression_Station> filtered = FindCSByFilter(CS_system, CheckByMore, CSWorkshopsToFind);
 			cout << filtered;
-			if (!filtered.empty()) { CSPacket(GTS, filtered); };
+			if (!filtered.empty()) { CSPacket(GTS, filtered, connections); };
 			break;
 		}
 		case 3:
 		{
 			unordered_map<int, Compression_Station> filtered = FindCSByFilter(CS_system, CheckByLess, CSWorkshopsToFind);
 			cout << filtered;
-			if (!filtered.empty()) { CSPacket(GTS, filtered); };
+			if (!filtered.empty()) { CSPacket(GTS, filtered, connections); };
 			break;
 		}
 		}
@@ -222,7 +239,35 @@ void Gas_Transportation_System::PacketEditCS(std::unordered_map<int, Compression
 	}
 }
 
-int Gas_Transportation_System::PipelinePacket(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipe_List)
+int Gas_Transportation_System::DeleteObjects(std::unordered_map<int, Compression_Station>& System, std::unordered_set<int>& IDs, std::vector<Link>& connections)
+{
+	if ((System.empty()) || (IDs.empty()))
+	{
+		std::cout << "There is no objects or you didn't give any IDs." << std::endl;
+		return 0;
+	}
+	for (const auto& s : IDs)
+	{
+		delete_CS(System, connections, s);
+	}
+	return 1;
+}
+
+int Gas_Transportation_System::DeleteObjects(std::unordered_map<int, Pipe>& System, std::unordered_set<int>& IDs, std::vector<Link>& connections)
+{
+	if ((System.empty()) || (IDs.empty()))
+	{
+		std::cout << "There is no objects or you didn't give any IDs." << std::endl;
+		return 0;
+	}
+	for (const auto& s : IDs)
+	{
+		delete_pipe(System, connections, s);
+	}
+	return 1;
+}
+
+int Gas_Transportation_System::PipelinePacket(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipe_List, std::vector<Link>& connections)
 {
 	if (Pipe_List.empty())
 	{
@@ -237,7 +282,7 @@ int Gas_Transportation_System::PipelinePacket(Gas_Transportation_System& GTS, st
 	case 1:
 	{
 		unordered_set<int> IDs = GetIds(Pipe_List);
-		DeleteObjects(GTS.Pipeline, IDs);
+		DeleteObjects(GTS.Pipeline, IDs, connections);
 		return 1;
 	}
 	case 2:
@@ -255,7 +300,7 @@ int Gas_Transportation_System::PipelinePacket(Gas_Transportation_System& GTS, st
 	}
 }
 
-int Gas_Transportation_System::CSPacket(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>& CS_System)
+int Gas_Transportation_System::CSPacket(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>& CS_System, std::vector<Link>& connections)
 {
 	if (CS_System.empty())
 	{
@@ -270,7 +315,7 @@ int Gas_Transportation_System::CSPacket(Gas_Transportation_System& GTS, std::uno
 	case 1:
 	{
 		unordered_set<int> IDs = GetIds(CS_System);
-		DeleteObjects(GTS.Pipeline, IDs);
+		DeleteObjects(GTS.Pipeline, IDs, connections);
 		return 1;
 	}
 	case 2:
@@ -286,6 +331,8 @@ int Gas_Transportation_System::CSPacket(Gas_Transportation_System& GTS, std::uno
 	}
 	}
 }
+
+
 
 
 

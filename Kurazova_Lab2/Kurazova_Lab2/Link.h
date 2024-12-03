@@ -21,12 +21,13 @@ struct Link
 	friend void dfs(int station, std::vector<int>& order, std::unordered_set<int>& visited, const std::vector<Link>& connections, std::unordered_set<int>& gray_stations, bool& flag);
 	friend void deletePipeConnection(int id, std::vector<Link>& connections);
 	friend void deleteCSConnections(int id, std::vector<Link>& connections);
+	friend void LoadConnections(std::vector<Link>& connections, const Gas_Transportation_System& GTS, std::ifstream& in);
 
 	friend std::ostream& operator << (std::ostream& out, const Link& link);
 	friend std::ostream& operator << (std::ostream& out, const std::vector<Link>& system);
 	friend std::ofstream& operator << (std::ofstream& out, const Link& link);
 	friend std::ofstream& operator << (std::ofstream& out, const std::vector<Link>& system);
-	friend std::ifstream& operator >> (std::ifstream& out, Link& connection);
+	friend std::ifstream& operator >> (std::ifstream& in, Link& connection);
 	
 	
 	template <typename T>

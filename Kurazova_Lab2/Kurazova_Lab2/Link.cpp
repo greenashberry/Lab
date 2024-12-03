@@ -10,6 +10,7 @@
 #include "Instruments.h"
 #include <stack>
 #include <algorithm>
+#include <string>
 using namespace std;
 
 bool CheckByDiameter(const Pipe& Truba, int parameter);
@@ -137,6 +138,57 @@ void dfs(int station, std::vector<int>& order, std::unordered_set<int>& visited,
 	gray_stations.erase(station);
 }
 
+void deletePipeConnection(int id, std::vector<Link>& connections)
+{
+	for (auto i = 0; i < connections.size(); i++)
+	{
+		if (connections[i].pipeline == id)
+		{
+			connections.erase(connections.begin() + i);
+			return;
+		}
+	}
+}
+
+void deleteCSConnections(int id, std::vector<Link>& connections)
+{
+	for (auto i = 0; i < connections.size(); i++)
+	{
+		if (connections[i].CS_inlet == id || connections[i].CS_outlet == id)
+		{
+			connections.erase(connections.begin() + i);
+		}
+	}
+}
+
+void LoadConnections(std::vector<Link>& connections, const Gas_Transportation_System& GTS, std::ifstream& in)
+{
+	if (!in)
+	{
+		cout << "File doesn't exist or it is invalid!" << endl;
+		return;
+	}
+	string input;
+	Link connection;
+	while (getline(in, input))
+	{
+		if (input == "LINK")
+		{
+			in >> connection;
+			if (!GTS.CS_system.contains(connection.CS_inlet) || !GTS.CS_system.contains(connection.CS_outlet) || !GTS.Pipeline.contains(connection.pipeline))
+			{
+				cout << "Objection in connection doesn't exist" << endl;
+				in.clear();
+				in.ignore(numeric_limits<streamsize>::max(), '\n');
+				return;
+			}
+			else
+			{
+				connections.push_back(connection);
+			}
+		}
+	}
+}
 
 std::ostream& operator<<(std::ostream& out, const Link& link)
 {
@@ -184,9 +236,31 @@ std::ofstream& operator<<(std::ofstream& out, const std::vector<Link>& system)
 	return out;
 }
 
-std::ifstream& operator>>(std::ifstream& out, Link& connection)
+std::ifstream& operator>>(std::ifstream& in, Link& connection)
 {
-	
+	if ((in >> connection.CS_inlet).fail() || (in.peek() != '\n') || (connection.CS_inlet < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	if ((in >> connection.CS_outlet).fail() || (in.peek() != '\n') || (connection.CS_outlet < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	if ((in >> connection.pipeline).fail() || (in.peek() != '\n') || (connection.pipeline < 0))
+	{
+		in.clear();
+		in.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "File is invalid!" << endl;
+		return in;
+	}
+	return in;
 }
+
 
 

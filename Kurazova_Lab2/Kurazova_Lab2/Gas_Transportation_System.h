@@ -8,6 +8,8 @@
 #include <fstream>
 #include <unordered_set>
 
+struct Link;
+
 struct Gas_Transportation_System
 {
 	std::unordered_map<int, Pipe> Pipeline;
@@ -21,30 +23,19 @@ struct Gas_Transportation_System
 	friend std::ofstream& operator << (std::ofstream& out, const Gas_Transportation_System& GTS);
 	friend std::ifstream& operator >> (std::ifstream& in, Gas_Transportation_System& GTS);
 
-	void delete_pipe(std::unordered_map<int, Pipe>& Pipeline, int ID);
-	void delete_CS(std::unordered_map<int, Compression_Station>& CS_system, int ID);
-	void PipesFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>&);
-	void CSFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>);
+	void delete_pipe(std::unordered_map<int, Pipe>& Pipeline, std::vector<Link>& connections,  int ID);
+	void delete_CS(std::unordered_map<int, Compression_Station>& CS_system, std::vector<Link>& connections, int ID);
+	void PipesFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>&, std::vector<Link>& connections);
+	void CSFiltering(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>, std::vector<Link>& connections);
 	void PacketEditPipe(std::unordered_map<int, Pipe>&, std::unordered_set<int>&, bool);
 	void PacketEditCS(std::unordered_map<int, Compression_Station>&, std::unordered_set<int>&);
-	int PipelinePacket(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipe_List);
-	int CSPacket(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>& CS_System);
+	int PipelinePacket(Gas_Transportation_System& GTS, std::unordered_map<int, Pipe>& Pipe_List, std::vector<Link>& connections);
+	int CSPacket(Gas_Transportation_System& GTS, std::unordered_map<int, Compression_Station>& CS_System, std::vector<Link>& connections);
+	int DeleteObjects(std::unordered_map<int, Pipe>& System, std::unordered_set<int>& IDs, std::vector<Link>& connections);
+	int DeleteObjects(std::unordered_map<int, Compression_Station>& System, std::unordered_set<int>& IDs, std::vector<Link>& connections);
 };
 
-template<class T>
-int DeleteObjects(std::unordered_map<int, T>& System, std::unordered_set<int>& IDs)
-{
-	if ((System.empty()) || (IDs.empty()))
-	{
-		std::cout << "There is no objects or you didn't give any IDs." << std::endl;
-		return 0;
-	}
-	for (const auto& s : IDs)
-	{
-		System.erase(s);
-	}
-	return 1;
-}
+
 
 template<class T>
 std::unordered_set<int> GetIds(const std::unordered_map<int, T>& System)
