@@ -9,6 +9,7 @@
 #include "Instruments.h"
 #include <unordered_set>
 #include <stack>
+#include <queue>
 
 struct Link
 {
@@ -22,6 +23,8 @@ struct Link
 	friend void deletePipeConnection(int id, std::vector<Link>& connections);
 	friend void deleteCSConnections(int id, std::vector<Link>& connections);
 	friend void LoadConnections(std::vector<Link>& connections, const Gas_Transportation_System& GTS, std::ifstream& in);
+	friend int Minimal_CS(std::unordered_set<int> ids, std::unordered_map<int, int> distances);
+	friend int Dijkstra(std::vector<Link>& connections, Gas_Transportation_System& GTS, int begin_id, int end_id);
 
 	friend std::ostream& operator << (std::ostream& out, const Link& link);
 	friend std::ostream& operator << (std::ostream& out, const std::vector<Link>& system);

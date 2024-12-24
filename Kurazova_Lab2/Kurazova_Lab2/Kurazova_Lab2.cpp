@@ -20,6 +20,7 @@ void PipesFiltering(std::unordered_map<int, Pipe>&);
 void CSFiltering(std::unordered_map<int, Compression_Station>);
 void TopSort(const std::unordered_map<int, Compression_Station>& CS, const std::vector<Link>& connections);
 void LoadConnections(std::vector<Link>& connections, const Gas_Transportation_System& GTS, ifstream& in);
+int Dijkstra(std::vector<Link>& connections, Gas_Transportation_System& GTS, int begin_id, int end_id);
 
 void Menu()
 {
@@ -35,6 +36,7 @@ void Menu()
     cout << "10. Add a connection" << endl;
     cout << "11. View all connections" << endl;
     cout << "12. Topological sort" << endl;
+    cout << "13. Djikstra" << endl;
     cout << "0. Exit" << endl;
 }
 
@@ -56,7 +58,7 @@ int main()
     while (1)
     {
         Menu();
-        switch (GetNumber(0, 12))
+        switch (GetNumber(0, 13))
         {
         case 1:
         {
@@ -135,6 +137,14 @@ int main()
         {
             TopSort(GTS.CS_system, connections);
             break;
+        }
+        case 13:
+        {
+            cout << "Start point: " << endl;
+            int start = GetNumber(0, Compression_Station::MaxID);
+            cout << "End point: " << endl;
+            int end = GetNumber(0, Compression_Station::MaxID);
+            Dijkstra(connections, GTS, start, end);
         }
         case 0:
         {

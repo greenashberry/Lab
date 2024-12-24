@@ -11,6 +11,8 @@
 #include <stack>
 #include <algorithm>
 #include <string>
+#include <limits>
+
 using namespace std;
 
 bool CheckByDiameter(const Pipe& Truba, int parameter);
@@ -79,6 +81,62 @@ bool Link::CreateLink(Gas_Transportation_System& GTS, std::vector<Link>& system,
 	}
 	system.push_back(k);
 	return 1;
+}
+
+int Minimal_CS(std::unordered_set<int> ids, std::unordered_map<int, int> distances)
+{
+	int min_distance = numeric_limits<int>::max();
+	int cs_id = -1;
+	for (auto const i : ids)
+	{
+		if (min_distance > distances[i])
+		{
+			cs_id = i;
+			min_distance = distances[i];
+		}
+	}
+	return cs_id;
+}
+
+int Dijkstra(std::vector<Link>& connections, Gas_Transportation_System& GTS, int begin_id, int end_id)
+{
+	unordered_set<int> processed_cs;
+	unordered_set<int> unprocessed_cs;
+	unordered_map<int, int> distances;
+	for (auto const i : GTS.CS_system)
+	{
+		unprocessed_cs.insert(i.first);
+		if (i.first != begin_id)
+		{
+			distances.insert(i.first, numeric_limits<int>::max());
+		}
+		else
+		{
+			distances.insert(i.first, 0);
+		}
+	}
+	int active;
+	while (!unprocessed_cs.empty())
+	{
+		active = Minimal_CS(unprocessed_cs, distances);
+		unprocessed_cs.erase(active);
+		for (const auto i : connections)
+		{
+			if (i.CS_inlet == active && !unprocessed_cs.contains(i.CS_outlet) && distances[active] != numeric_limits<int>::max())
+			{
+				distances[i.CS_outlet] = ((distances[active] + GTS.Pipeline[i.pipeline].GetLength()) < distances[i.CS_outlet])? distances[active] + GTS.Pipeline[i.pipeline].GetLength():distances[i.CS_outlet];
+			}
+		}
+	}
+	if (distances[end_id] != numeric_limits<int>::max())
+	{
+		cout << "Minimal distance: " << distances[end_id] << endl;
+	}
+	else
+	{
+		cout << "CS is isolated!" << endl;
+	}
+
 }
 
 

@@ -25,6 +25,7 @@ public:
 	friend bool CheckByMaintenanceStatus(const Pipe& truba, bool parameter);
 	friend bool CheckByDiameter(const Pipe& Truba, int parameter);
 	friend bool CheckByAvailability(const Pipe& Truba, bool parameter);
+	int GetLength() const { return length; };
 
 	friend std::ostream& operator << (std::ostream& out, const Pipe&);
 	friend std::istream& operator >> (std::istream& in, std::unordered_map<int, Pipe>&);
